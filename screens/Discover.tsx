@@ -1,10 +1,13 @@
-import {Image, SafeAreaView, Text, View} from 'react-native';
-import React from 'react';
-import {Avatar} from '../assets';
+import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import React, {useState} from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {GOOGLE_MAPS_API_KEY} from '@env';
+import MenuContainer from '../components/MenuContainer.tsx';
+import {Attractions, Avatar, Hotels, Restaurants} from '../assets';
 
 const Discover = () => {
+  const [type, setType] = useState('restaurants');
+
   return (
     <SafeAreaView>
       {/*  First section */}
@@ -41,6 +44,35 @@ const Discover = () => {
           }}
         />
       </View>
+
+      {/*  Menu section */}
+      <ScrollView>
+        <View className="flex-row justify-between px-8 mt-8">
+          <MenuContainer
+            key="hotel"
+            title="Hotels"
+            imageSrc={Hotels}
+            type={type}
+            setType={setType}
+          />
+
+          <MenuContainer
+            key="attractions"
+            title="Atractions"
+            imageSrc={Attractions}
+            type={type}
+            setType={setType}
+          />
+
+          <MenuContainer
+            key="restaurants"
+            title="Restaurants"
+            imageSrc={Restaurants}
+            type={type}
+            setType={setType}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
