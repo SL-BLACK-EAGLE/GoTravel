@@ -2,6 +2,7 @@ import {Image, SafeAreaView, Text, View} from 'react-native';
 import React from 'react';
 import {Avatar} from '../assets';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {GOOGLE_MAPS_API_KEY} from '@env';
 
 const Discover = () => {
   return (
@@ -25,13 +26,17 @@ const Discover = () => {
       {/*  Search section */}
       <View className="flex-row px-4 bg-white mt-8 mx-4 shadow-lg rounded-lg">
         <GooglePlacesAutocomplete
+          GooglePlacesDetailsQuery={{
+            fields: 'geometry',
+          }}
           placeholder="Search"
+          fetchDetails={true}
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(data, details);
+            console.log(details?.geometry?.viewport);
           }}
           query={{
-            key: 'YOUR API KEY',
+            key: GOOGLE_MAPS_API_KEY,
             language: 'en',
           }}
         />
