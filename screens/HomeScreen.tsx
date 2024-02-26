@@ -1,16 +1,11 @@
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import {HeroImage} from '../assets';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, [navigation]);
   return (
     <SafeAreaView className="bg-white flex-1 relative">
       {/*First Section*/}
@@ -57,7 +52,7 @@ const HomeScreen = () => {
 
       {/*Button Section*/}
       <View className="flex-row items-center justify-center absolute bottom-20 right-0 left-0 cursor-pointer">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Discover')}>
           <View className="w-24 h-24  border-l-2 border-t-4 border-r-2 border-cyan-600 rounded-full items-center justify-center">
             <Animatable.View
               animation="pulse"
