@@ -1,9 +1,17 @@
-import {Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 import MenuContainer from '../components/MenuContainer.tsx';
 import {Attractions, Avatar, Hotels, Restaurants} from '../assets';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Discover = () => {
   const [type, setType] = useState('restaurants');
@@ -71,6 +79,17 @@ const Discover = () => {
             type={type}
             setType={setType}
           />
+        </View>
+
+        {/*  Title section */}
+        <View>
+          <View>
+            <Text>Top Tips</Text>
+            <TouchableOpacity className="flex-row flex justify-between items-center mt-5 px-4">
+              <Text>Explore</Text>
+              <Icon name="long-arrow-right" size={25} color="gray" />
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

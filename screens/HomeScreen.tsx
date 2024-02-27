@@ -25,7 +25,7 @@ const HomeScreen = () => {
       </View>
 
       {/*Third Section*/}
-      <View className="flex-row px-6 mt-4 items-center space-x-2">
+      <View className=" flex-row px-6 mt-4 items-center space-x-2">
         <Text className="text-gray-500 text-lg font-light">
           Plan your next adventure, seamlessly book flights & hotels, and
           discover hidden gems - all from one app.
@@ -33,7 +33,7 @@ const HomeScreen = () => {
       </View>
 
       {/*circle Section*/}
-      <View className="flex-col bottom-36 -right-32 items-center justify-center absolute">
+      <View className=" flex-col bottom-36 -right-32 items-center justify-center absolute">
         <View className="w-96 h-96 bg-cyan-500 rounded-full items-center justify-center" />
       </View>
       <View className="flex-col -bottom-32 -left-32 items-center justify-center absolute">
