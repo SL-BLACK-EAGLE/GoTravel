@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -6,18 +7,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 import MenuContainer from '../components/MenuContainer.tsx';
-import {Attractions, Avatar, Hotels, Restaurants} from '../assets';
+import {Attractions, Avatar, Hotels, NotFound, Restaurants} from '../assets';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ItemCardContainer from '../components/ItemCardContainer.tsx';
+import {getPlacesData} from '../api';
 
 const Discover = () => {
   const [type, setType] = useState('restaurants');
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [mainData, setMainData] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    getPlacesData().then(data => {
+      setMainData(data);
+      setInterval(() => {
+        setIsLoading(false);
+      }, 2000);
+    });
+  }, []);
+
   return (
-    <SafeAreaView>
+    <SafeAreaView className="flex-1">
       {/*  First section */}
       <View className="flex-row px-8 justify-between items-center">
         <View className="flex-col">
@@ -44,7 +60,7 @@ const Discover = () => {
           fetchDetails={true}
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(details?.geometry?.viewport);
+            console.log(data, details?.geometry?.viewport);
           }}
           query={{
             key: GOOGLE_MAPS_API_KEY,
@@ -54,44 +70,82 @@ const Discover = () => {
       </View>
 
       {/*  Menu section */}
-      <ScrollView>
-        <View className="flex-row justify-between px-8 mt-8">
-          <MenuContainer
-            key="hotel"
-            title="Hotels"
-            imageSrc={Hotels}
-            type={type}
-            setType={setType}
-          />
-
-          <MenuContainer
-            key="attractions"
-            title="Atractions"
-            imageSrc={Attractions}
-            type={type}
-            setType={setType}
-          />
-
-          <MenuContainer
-            key="restaurants"
-            title="Restaurants"
-            imageSrc={Restaurants}
-            type={type}
-            setType={setType}
-          />
+      {isLoading ? (
+        <View className="justify-center items-center flex-1">
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
+      ) : (
+        <ScrollView>
+          <View className="flex-row justify-between px-8 mt-8">
+            <MenuContainer
+              key="hotel"
+              title="Hotels"
+              imageSrc={Hotels}
+              type={type}
+              setType={setType}
+            />
 
-        {/*  Title section */}
-        <View>
-          <View>
-            <Text>Top Tips</Text>
-            <TouchableOpacity className="flex-row flex justify-between items-center mt-5 px-4">
-              <Text>Explore</Text>
-              <Icon name="long-arrow-right" size={25} color="gray" />
-            </TouchableOpacity>
+            <MenuContainer
+              key="attractions"
+              title="Atractions"
+              imageSrc={Attractions}
+              type={type}
+              setType={setType}
+            />
+
+            <MenuContainer
+              key="restaurants"
+              title="Restaurants"
+              imageSrc={Restaurants}
+              type={type}
+              setType={setType}
+            />
           </View>
-        </View>
-      </ScrollView>
+
+          {/*  Title section */}
+          <View>
+            <View className="flex-row flex justify-between items-center mt-8 px-4">
+              <Text className="text-emerald-700 text-[28px] font-bold">
+                Top Tips
+              </Text>
+              <TouchableOpacity className="flex-row flex justify-between items-center space-x-2">
+                <Text className="text-gray-500 text-xl">Explore</Text>
+                <Icon name="long-arrow-right" size={25} color="gray" />
+              </TouchableOpacity>
+            </View>
+            <View className="px-4 mt-8 flex-row items-center justify-evenly flex-wrap">
+              {mainData?.length > 0 ? (
+                <>
+                  {mainData?.map((data, index) => (
+                    <ItemCardContainer
+                      key={index}
+                      imgSrc={
+                        data?.photo?.images?.medium?.url
+                          ? data?.photo?.images?.medium?.url
+                          : 'https://assets.traveltriangle.com/blog/wp-content/uploads/2014/11/Beddagana-Wetland-Park_9th-jun.jpg'
+                      }
+                      title={data?.name}
+                      location={data?.location_string}
+                    />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <View className="w-full h-[400px] items-center space-y-8 justify-center">
+                    <Image
+                      source={NotFound}
+                      className="w-32 h-32 object-cover"
+                    />
+                    <Text className="text-gray-500 text-xl font-semibold">
+                      Opps...No data found
+                    </Text>
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
