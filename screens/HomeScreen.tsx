@@ -25,7 +25,9 @@ const HomeScreen = () => {
       </View>
 
       {/*Third Section*/}
-      <View className=" flex-row px-6 mt-4 items-center space-x-2">
+      <View
+        className="
+      flex-row px-6 mt-4 items-center space-x-2">
         <Text className="text-gray-500 text-lg font-light">
           Plan your next adventure, seamlessly book flights & hotels, and
           discover hidden gems - all from one app.

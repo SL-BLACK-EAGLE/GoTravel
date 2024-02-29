@@ -34,15 +34,20 @@ const Discover = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mainData, setMainData] = useState([]);
 
+  const [bl_lat, setBl_lat] = useState(null);
+  const [bl_lng, setBl_lng] = useState(null);
+  const [tr_lat, setTr_lat] = useState(null);
+  const [tr_lng, setTr_lng] = useState(null);
+
   useEffect(() => {
     setIsLoading(true);
-    getPlacesData().then(data => {
+    getPlacesData(bl_lat, bl_lng, tr_lat, tr_lng, type).then(data => {
       setMainData(data);
       setInterval(() => {
         setIsLoading(false);
       }, 2000);
     });
-  }, []);
+  }, [bl_lat, bl_lng, tr_lat, tr_lng, type]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -72,7 +77,10 @@ const Discover = () => {
           fetchDetails={true}
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
-            console.log(data, details?.geometry?.viewport);
+            setBl_lat(details?.geometry?.viewport?.southwest?.lat);
+            setBl_lng(details?.geometry?.viewport?.southwest?.lng);
+            setTr_lat(details?.geometry?.viewport?.northeast?.lat);
+            setTr_lng(details?.geometry?.viewport?.northeast?.lng);
           }}
           query={{
             key: GOOGLE_MAPS_API_KEY,
@@ -90,7 +98,7 @@ const Discover = () => {
         <ScrollView>
           <View className="flex-row justify-between px-8 mt-8 bg-white">
             <MenuContainer
-              key="hotel"
+              key={'hotels'}
               title="Hotels"
               imageSrc={Hotels}
               type={type}
@@ -98,15 +106,15 @@ const Discover = () => {
             />
 
             <MenuContainer
-              key="attractions"
-              title="Atractions"
+              key={'attractions'}
+              title="Attractions"
               imageSrc={Attractions}
               type={type}
               setType={setType}
             />
 
             <MenuContainer
-              key="restaurants"
+              key={'restaurants'}
               title="Restaurants"
               imageSrc={Restaurants}
               type={type}
@@ -134,10 +142,11 @@ const Discover = () => {
                       imgSrc={
                         data?.photo?.images?.medium?.url
                           ? data?.photo?.images?.medium?.url
-                          : 'https://assets.traveltriangle.com/blog/wp-content/uploads/2014/11/Beddagana-Wetland-Park_9th-jun.jpg'
+                          : 'https://successafrika.com/wp-content/uploads/2022/01/How-to-say-no-in-difficult-situations.jpg'
                       }
                       title={data?.name}
                       location={data?.location_string}
+                      data={data}
                     />
                   ))}
                 </>

@@ -1,20 +1,38 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 interface ItemCardContainerProps {
   imgSrc: string;
   title?: string;
   location?: string;
+  data?: Data;
+}
+
+interface Data {
+  photo?: {
+    images?: {
+      medium?: {
+        url?: string;
+      };
+    };
+  };
+  name?: string;
+  location_string?: string;
 }
 
 const ItemCardContainer: React.FC<ItemCardContainerProps> = ({
   imgSrc,
   title,
   location,
+  data,
 }) => {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity className="rounded-md border border-gray-300 space-y-2 px-3 py-2 shadow-md bg-white w-[182px] my-2">
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ItemScreen', {param: data})}
+      className="rounded-md border border-gray-300 space-y-2 px-3 py-2 shadow-md bg-white w-[182px] my-2">
       <Image
         source={{uri: imgSrc}}
         className="w-full h-40 object-cover rounded-md"
