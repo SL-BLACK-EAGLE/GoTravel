@@ -16,6 +16,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ItemCardContainer from '../components/ItemCardContainer.tsx';
 import {getPlacesData} from '../api';
 
+interface Data {
+  photo?: {
+    images?: {
+      medium?: {
+        url?: string;
+      };
+    };
+  };
+  name?: string;
+  location_string?: string;
+}
+
 const Discover = () => {
   const [type, setType] = useState('restaurants');
 
@@ -33,7 +45,7 @@ const Discover = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       {/*  First section */}
       <View className="flex-row px-8 justify-between items-center">
         <View className="flex-col">
@@ -76,7 +88,7 @@ const Discover = () => {
         </View>
       ) : (
         <ScrollView>
-          <View className="flex-row justify-between px-8 mt-8">
+          <View className="flex-row justify-between px-8 mt-8 bg-white">
             <MenuContainer
               key="hotel"
               title="Hotels"
@@ -116,7 +128,7 @@ const Discover = () => {
             <View className="px-4 mt-8 flex-row items-center justify-evenly flex-wrap">
               {mainData?.length > 0 ? (
                 <>
-                  {mainData?.map((data, index) => (
+                  {mainData?.map((data: Data, index) => (
                     <ItemCardContainer
                       key={index}
                       imgSrc={
